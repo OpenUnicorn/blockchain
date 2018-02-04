@@ -70,6 +70,7 @@ class Blockchain:
 		'''
 		Simple Proof of Work Algorithm:
 		-Find a number x such that hash(yx) contains 4 leading 0
+		-We can increase the difficulty by adding more leading 0's
 		-x is the new proof, y is the last proof
 		
 		:params last_proof: <int> Last Proof
@@ -77,3 +78,21 @@ class Blockchain:
 		'''
 		#TODO: Implement Proof Of work Using Hash Cash
 		
+		proof = 0
+		while self.validate_proof(last_proof,proof) is False:
+			proof +=1
+		
+		return proof
+	
+	@staticmethod
+	def validate_proof(last_proof,proof):
+		'''
+		Validates the prooof
+		:param last_proof: <int> Previous Proof
+		:param proof: <int> Current Proof
+		:return: <bool> True if has 4 leading 0, False if not.
+		'''
+		
+		guess = f'{last_proof}{proof}'.encode()# using f strings to concatinate the proofs
+		guess_hash = hashlib.sha256(guess).hexdigest()
+		return guess_hash[:4] == '0000'
