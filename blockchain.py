@@ -1,6 +1,7 @@
 import hashlib
 import json
 from time import time
+from uuid import uuid4
 
 class Blockchain:
 	def __init__(self):
@@ -21,9 +22,11 @@ class Blockchain:
 		block = {
 		'index':len(self.chain)+1, 
 		'timestamp': time(),
+		'transaction':self.current_transaction,
 		'proof':proof,
 		'previous_hash': previous_hash or self.hash(self.chain[-1])
 		}
+		
 		self.transactions = []
 		self.chain.append(block)
 		return block
@@ -55,8 +58,22 @@ class Blockchain:
 		'''
 		
 		# If the dictionary is not ordered we get inconsistent hashes
-		block_string = json.dumps(block,sort_keys=True).encode()
+		StringToEncode = json.dumps(block,sort_keys=True).encode()
+		return hashlib.sha256(StringToEncode).hexdigest()
 	
 	@property
 	def last_block(self):
 		return self.chain[-1]
+		
+	
+	def proof_of_work(self,last_proof):
+		'''
+		Simple Proof of Work Algorithm:
+		-Find a number x such that hash(yx) contains 4 leading 0
+		-x is the new proof, y is the last proof
+		
+		:params last_proof: <int> Last Proof
+		:return: <int>
+		'''
+		#TODO: Implement Proof Of work Using Hash Cash
+		
