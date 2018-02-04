@@ -54,7 +54,8 @@ class Blockchain:
 		:return <string> Hashed Blocked
 		'''
 		
-		block_string = json.dumps(block).encode()
+		# If the dictionary is not ordered we get inconsistent hashes
+		block_string = json.dumps(block,sort_keys=True).encode()
 	
 	@property
 	def last_block(self):
